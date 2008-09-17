@@ -1,0 +1,4 @@
+page.replace_html 'results', @response
+page.visual_effect :appear, 'results'
+page['status'].value = ''
+page['commit'].disabled = false

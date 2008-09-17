@@ -1,0 +1,33 @@
+<div id="el-form">
+	<script type="text/javascript" charset="utf-8">
+	var the_limit = 160;
+    
+	updatechars = function()
+	{
+			$('preview').style.background = '#ccc'; 
+	        var len = $('preview').innerHTML.length;
+	        if (len >= the_limit) $('chars-limit').innerHTML = "já está bueno, si?";
+	        else $('chars-limit').innerHTML = (the_limit - len) + " ainda lo riestam"
+	}
+	</script>
+	<% form_remote_tag(:url=>{:controller => 'statuses', :action => 'update'}, :loading=>"$('commit').disabled=true;",:complete=>"$('commit').disabled=false;") do %>
+		<label for="login">su login:</label><br/><input type="text" name="login" value="" id="login"/><br/>
+		<label for="password">su seña:</label><br/><input type="password" name="password" value="" id="password"/><br/>
+		<label for="status">su tweet:</label><br/><textarea name="status" rows="8" cols="40" id="status" onkeydown='updatechars()' onblur='updatechars()' onkeyup='updatechars()'></textarea>
+		<br/>
+		su tweet en portunhol: 
+		<div id="preview"></div>
+		<h6><span id="chars-limit"></span></h6>
+		<p><input type="submit" id="commit" value="Envie el Tweet, Cabrón &rarr;"></p>
+		
+	<% end %>
+
+	<div id="results"></div>
+</div>
+<%= observe_field(:status,
+                 :frequency => 0.5,
+                 :update => :preview,
+                 #:loading => "updatechars()",
+                 #:complete => "Element.hide('spinner')",
+                 :with => "'status=' + encodeURIComponent(value)",
+                 :url => { :controller => "statuses", :action => :preview }) %>
